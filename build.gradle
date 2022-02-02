@@ -1,0 +1,82 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven-publish'
+    group = 'com.code'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+        maven{
+            url "https://www.nexus-yoolee.tk/repository/maven-public/"
+            credentials {
+                username project.repoUser
+                password project.repoPassword
+            }
+        }
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web-services'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        compileOnly 'org.projectlombok:lombok:1.18.22'
+        annotationProcessor 'org.projectlombok:lombok:1.18.22'
+        testCompileOnly 'org.projectlombok:lombok:1.18.22'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
+
+project(':nexus-put') {
+    version = '0.0.7-SNAPSHOT'
+    bootJar {
+        enabled = false
+    }
+    jar {
+        enabled = true
+    }
+    artifacts {
+        publishing {
+            repositories {
+                maven {
+                    if (project.version.toString().endsWith("SNAPSHOT")) {
+                        url "https://www.nexus-yoolee.tk/repository/maven-snapshots/"
+                    } else {
+                        url "https://www.nexus-yoolee.tk/repository/maven-releases/"
+                    }
+                    credentials {
+                        username project.repoUser
+                        password project.repoPassword
+                    }
+                }
+            }
+            publications {
+                maven(MavenPublication) {
+                    artifact("build/libs/nexus-put-0.0.8-SNAPSHOT-plain.jar") {
+                        extension 'jar'
+                    }
+                }
+            }
+        }
+        publishMavenPublicationToMavenRepository.dependsOn(jar)
+    }
+}
+
+project(':nexus-get'){
+    dependencies {
+        implementation 'com.code:nexus-put:0.0.7-SNAPSHOT'
+    }
+}
+
