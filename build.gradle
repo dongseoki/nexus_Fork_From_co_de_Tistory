@@ -16,7 +16,8 @@ allprojects {
     repositories {
         mavenCentral()
         maven{
-            url "https://www.nexus-yoolee.tk/repository/maven-public/"
+            allowInsecureProtocol = true
+            url "http://localhost:8081/repository/maven-public/"
             credentials {
                 username project.repoUser
                 password project.repoPassword
@@ -52,9 +53,9 @@ project(':nexus-put') {
             repositories {
                 maven {
                     if (project.version.toString().endsWith("SNAPSHOT")) {
-                        url "https://www.nexus-yoolee.tk/repository/maven-snapshots/"
+                        url "http://localhost:8081/repository/maven-snapshots/"
                     } else {
-                        url "https://www.nexus-yoolee.tk/repository/maven-releases/"
+                        url "https://localhost:8081/repository/maven-releases/"
                     }
                     credentials {
                         username project.repoUser
@@ -64,7 +65,7 @@ project(':nexus-put') {
             }
             publications {
                 maven(MavenPublication) {
-                    artifact("build/libs/nexus-put-0.0.8-SNAPSHOT-plain.jar") {
+                    artifact("build/libs/nexus-put-0.0.7-SNAPSHOT-plain.jar") {
                         extension 'jar'
                     }
                 }
