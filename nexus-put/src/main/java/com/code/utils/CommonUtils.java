@@ -9,6 +9,14 @@ public class CommonUtils {
         for(int i : data){
             rtnData += i;
         }
-        return 0;
+        return rtnData;
+    }
+
+    public static int allMultiply(int ...data){
+        int rtnData = 1;
+        for(int i : data){
+            rtnData *= i;
+        }
+        return rtnData;
     }
 }
