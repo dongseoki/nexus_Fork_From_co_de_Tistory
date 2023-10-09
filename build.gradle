@@ -41,7 +41,7 @@ allprojects {
 }
 
 project(':nexus-put') {
-    version = '0.0.7-SNAPSHOT'
+    version = '0.0.8'
     bootJar {
         enabled = false
     }
@@ -52,10 +52,11 @@ project(':nexus-put') {
         publishing {
             repositories {
                 maven {
+                    allowInsecureProtocol = true
                     if (project.version.toString().endsWith("SNAPSHOT")) {
                         url "http://localhost:8081/repository/maven-snapshots/"
                     } else {
-                        url "https://localhost:8081/repository/maven-releases/"
+                        url "http://localhost:8081/repository/maven-releases/"
                     }
                     credentials {
                         username project.repoUser
@@ -65,7 +66,7 @@ project(':nexus-put') {
             }
             publications {
                 maven(MavenPublication) {
-                    artifact("build/libs/nexus-put-0.0.7-SNAPSHOT-plain.jar") {
+                    artifact("build/libs/nexus-put-0.0.8-plain.jar") {
                         extension 'jar'
                     }
                 }
