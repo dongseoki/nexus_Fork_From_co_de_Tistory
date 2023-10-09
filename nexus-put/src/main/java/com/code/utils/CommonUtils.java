@@ -9,6 +9,7 @@ public class CommonUtils {
         for(int i : data){
             rtnData += i;
         }
-        return 0;
+        System.out.println("rtnData = " + rtnData);
+        return rtnData;
     }
 }
